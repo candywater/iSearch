@@ -4,8 +4,9 @@
 内容来自[网易有道词典](http://dict.youdao.com/)。
 
 
-- v1.0.0 兼容 Python2、Python3 
-- v1.0.2 优化查询流程：查询后会自动提示是否存入本地 
+- v1.0.0 (9b5bd2b477a57a65da749ace015b09ba1adc6908) 兼容 Python2、Python3 
+- v1.0.2 (4ffdeee88533adf34209113cc8ad1de48e94e62a) 优化查询流程：查询后会自动提示是否存入本地 
+- v1.0.2 with readme (06013d610338397f8cdd69f330b43e1ee8d29f1b)
 
 ---
 
