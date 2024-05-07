@@ -8,6 +8,7 @@ import sqlite3
 import requests
 import bs4
 from termcolor import colored
+from iSearch.config import getConfig, SHOW_SAVE_DB_CONFIRM_MESSAGE, DEFAULT_SAVE_DB_LEVEL
 
 # Python2 compatibility
 if sys.version_info[0] == 2:
@@ -219,7 +220,7 @@ def search_online(word, printer=True):
     return expl
 
 
-def search_database(word):
+def search_database(word, config):
     '''offline search.'''
 
     conn = sqlite3.connect(os.path.join(DEFAULT_PATH, 'word.db'))
@@ -234,11 +235,14 @@ def search_database(word):
     else:
         print(colored(word + ' 不在本地，从有道词典查询', 'white', 'on_red'))
         search_online(word)
-        input_msg = '若存入本地，请输入优先级(1~5) ，否则 Enter 跳过\n>>> '
-        if sys.version_info[0] == 2:
-            add_in_db_pr = raw_input(input_msg)
+        if config[SHOW_SAVE_DB_CONFIRM_MESSAGE] == True:
+            input_msg = '若存入本地，请输入优先级(1~5) ，否则 Enter 跳过\n>>> '
+            if sys.version_info[0] == 2:
+                add_in_db_pr = raw_input(input_msg)
+            else:
+                add_in_db_pr = input(input_msg)
         else:
-            add_in_db_pr = input(input_msg)
+            add_in_db_pr = config[DEFAULT_SAVE_DB_LEVEL]
 
         if add_in_db_pr and add_in_db_pr.isdigit():
             if(int(add_in_db_pr) >= 1 and int(add_in_db_pr) <= 5):
@@ -526,6 +530,8 @@ def main():
     is_verbose = args.verbose
     is_output = args.output
 
+    config = getConfig()
+
     if args.add:
         default_pr = 1 if not args.set else int(args.set)
         add_word(' '.join(args.add), default_pr)
@@ -577,7 +583,7 @@ def main():
             curs.close()
             conn.close()
         word = ' '.join(args.word)
-        search_database(word)
+        search_database(word, config)
 
 
 if __name__ == '__main__':
